@@ -7,10 +7,12 @@ import xyz.pangosoft.ispendpoints.exception.exceptions.NoSuchElementException;
 import xyz.pangosoft.ispendpoints.exception.exceptions.NotFoundException;
 import xyz.pangosoft.ispendpoints.exception.exceptions.SQLException;
 import xyz.pangosoft.ispendpoints.model.Usuario;
+import xyz.pangosoft.ispendpoints.repository.ITblavisouserRepository;
 import xyz.pangosoft.ispendpoints.repository.IUsuarioRepository;
 import xyz.pangosoft.ispendpoints.service.IUsuarioService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.zip.DataFormatException;
 
 @Service
@@ -18,6 +20,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Autowired
     private IUsuarioRepository usuarioRepository;
+
+//    @Autowired
+//    private ITblavisouserRepository tblavisouserRepository;
 
     @Override
     public List<Usuario> getUsuarios() {
@@ -52,6 +57,21 @@ public class UsuarioServiceImpl implements IUsuarioService {
         } catch(DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> usuariosconzona() {
+        try {
+            if (usuarioRepository.resultado().size() > 0) {
+                return usuarioRepository.resultado();
+            } else {
+                throw new NoSuchElementException("No existen usuarios registrados");
+            }
+        } catch(DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        } catch(SQLException e) {
             throw new SQLException(e.getMessage());
         }
     }

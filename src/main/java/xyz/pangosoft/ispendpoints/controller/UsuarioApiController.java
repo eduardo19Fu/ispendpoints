@@ -19,7 +19,12 @@ public class UsuarioApiController {
 
     @GetMapping("/usuarios/get")
     public ResponseEntity<?> getUsuarios() {
-        return new ResponseEntity<>(usuarioService.getUsuarios(), HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.usuariosconzona(), HttpStatus.OK);
+    }
+
+    @GetMapping("/usuarios/zona/get")
+    public ResponseEntity<?> getUsuariosConZona() {
+        return new ResponseEntity<>(usuarioService.usuariosconzona(), HttpStatus.OK);
     }
 
     @GetMapping("/usuarios/get/{id}")
