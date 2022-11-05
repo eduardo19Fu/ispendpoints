@@ -28,7 +28,7 @@ public class ExceptionConfig {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getCause().getMessage());
     }
 
-    @ExceptionHandler({NumberFormatException.class})
+    @ExceptionHandler({NumberFormatException.class, ParseException.class})
     public ResponseEntity<?> formatException(Exception e) {
         LOGGER.error("Error => Detalle: " + e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getCause().getMessage());
