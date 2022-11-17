@@ -32,8 +32,8 @@ public class InstalacionNueva implements Serializable {
     private String nombreCompleto;
     private String identificacion;
     private String nit;
-    private int plan;
-    private int zona;
+    private int idplan;
+    private int idzona;
     private String correoElectronico;
     private String movil;
     private String direccionServicio;
@@ -41,7 +41,7 @@ public class InstalacionNueva implements Serializable {
     private String fotoIdentificacion;
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
-    private int tecnico;
+    private int idtecnico;
 
     @Temporal(TemporalType.DATE)
     private Date fechaInstalacion;

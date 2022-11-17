@@ -11,6 +11,7 @@ import xyz.pangosoft.ispendpoints.repository.IInstalacionNuevaRepository;
 import xyz.pangosoft.ispendpoints.service.IInstalacionNuevaService;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class InstalacionNuevaServiceImpl implements IInstalacionNuevaService {
@@ -23,6 +24,32 @@ public class InstalacionNuevaServiceImpl implements IInstalacionNuevaService {
         try {
             if (!instalacionNuevaRepository.findAll().isEmpty()) {
                 return instalacionNuevaRepository.findAll();
+            } else {
+                throw new NoSuchElementException("No existen elementos en la base de datos.");
+            }
+        } catch(DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findAll2() {
+        try {
+            if (!instalacionNuevaRepository.findAllInstalacionesNuevas().isEmpty()) {
+                return instalacionNuevaRepository.findAllInstalacionesNuevas();
+            } else {
+                throw new NoSuchElementException("No existen elementos en la base de datos.");
+            }
+        } catch(DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findAllByEstado(String estado) {
+        try {
+            if (!instalacionNuevaRepository.findAllByEstado(estado).isEmpty()) {
+                return instalacionNuevaRepository.findAllByEstado(estado);
             } else {
                 throw new NoSuchElementException("No existen elementos en la base de datos.");
             }

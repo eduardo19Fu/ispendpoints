@@ -29,7 +29,8 @@ public class InstalacionNuevaApiController {
 
     @GetMapping("/instalaciones-nuevas/get")
     public ResponseEntity<?> findAll() {
-        return new ResponseEntity<>(instalacionNuevaService.findAll(), HttpStatus.OK);
+        // return new ResponseEntity<>(instalacionNuevaService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(instalacionNuevaService.findAll2(), HttpStatus.OK);
     }
 
     @GetMapping("/instalaciones-nuevas/get/{id}")
@@ -37,38 +38,58 @@ public class InstalacionNuevaApiController {
         return new ResponseEntity<>(instalacionNuevaService.findInstalacion(id), HttpStatus.OK);
     }
 
+    @GetMapping("/instalaciones-nuevas/estado/get/{estado}")
+    public ResponseEntity<?> findInstalacionesNuevasEstado(@PathVariable("estado") String estado) {
+        return new ResponseEntity<>(instalacionNuevaService.findAllByEstado(estado), HttpStatus.OK);
+    }
+
     @PostMapping("/instalaciones-nuevas/post")
     public ResponseEntity<?> create(@RequestBody Map<String, Object> body) {
         InstalacionNueva instalacionNueva = new InstalacionNueva();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-        instalacionNueva.setNombreCompleto(body.get("nombreCompleto").toString());
+
+        instalacionNueva.setNombreCompleto(body.get("nombre_completo").toString());
         instalacionNueva.setIdentificacion(body.get("identificacion").toString());
         instalacionNueva.setNit(body.get("nit").toString());
-        instalacionNueva.setPlan((int) body.get("plan"));
-        instalacionNueva.setZona((int) body.get("zona"));
-        instalacionNueva.setCorreoElectronico(body.get("correoElectronico").toString());
+        instalacionNueva.setIdplan(Integer.parseInt(body.get("plan").toString()));
+        instalacionNueva.setIdzona(Integer.parseInt(body.get("zona").toString()));
+        instalacionNueva.setCorreoElectronico(body.get("correo_electronico").toString());
         instalacionNueva.setMovil(body.get("movil").toString());
-        instalacionNueva.setDireccionServicio(body.get("direccionServicio").toString());
-        instalacionNueva.setNotas(body.get("notas").toString());
-        instalacionNueva.setFotoIdentificacion(body.get("fotoIdentificacion").toString());
-        instalacionNueva.setTecnico((int) body.get("tecnico"));
-        instalacionNueva.setEstado(body.get("estado").toString());
-        try {
-            instalacionNueva.setFechaInstalacion(format.parse(body.get("fechaInstalacion").toString()));
-            instalacionNueva.setFechaVisita(format.parse(body.get("fechaVisita").toString()));
-        } catch (java.text.ParseException e) {
-            throw new ParseException(e.getMessage());
-        }
+        instalacionNueva.setDireccionServicio(body.get("direccion_servicio").toString());
+        instalacionNueva.setEstado("pendiente");
+        if (body.get("notas") != null)
+            instalacionNueva.setNotas(body.get("notas").toString());
+        instalacionNueva.setFotoIdentificacion(body.get("foto_identificacion").toString());
+
         return new ResponseEntity<>(instalacionNuevaService.save(instalacionNueva), HttpStatus.CREATED);
     }
 
     @PutMapping("/instalaciones-nuevas/put")
     public ResponseEntity<?> changeStatus(@RequestBody Map<String, Object> body) {
         InstalacionNueva instalacionNueva = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         instalacionNueva = instalacionNuevaService.findInstalacion((int) body.get("id"));
         instalacionNueva.setEstado(body.get("estado").toString());
+        instalacionNueva.setIdtecnico((int) body.get("tecnico"));
+
+        try {
+            if (!body.get("fecha_instalacion").toString().isEmpty() && !body.get("fecha_visita").toString().isEmpty()) {
+                instalacionNueva.setFechaInstalacion(format.parse(body.get("fecha_instalacion").toString()));
+                instalacionNueva.setFechaVisita(format.parse(body.get("fecha_visita").toString()));
+            } else if (!body.get("fecha_instalacion").toString().isEmpty() && body.get("fecha_visita").toString().isEmpty()) {
+                instalacionNueva.setFechaInstalacion(format.parse(body.get("fecha_instalacion").toString()));
+                instalacionNueva.setFechaVisita(null);
+            } else if (body.get("fecha_instalacion").toString().isEmpty() && !body.get("fecha_visita").toString().isEmpty()) {
+                instalacionNueva.setFechaInstalacion(null);
+                instalacionNueva.setFechaVisita(format.parse(body.get("fecha_visita").toString()));
+            } else {
+                instalacionNueva.setFechaInstalacion(null);
+                instalacionNueva.setFechaVisita(null);
+            }
+        } catch (java.text.ParseException e) {
+            throw new ParseException(e.getMessage());
+        }
 
         return new ResponseEntity<>(instalacionNuevaService.save(instalacionNueva), HttpStatus.CREATED);
     }
