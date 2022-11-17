@@ -38,9 +38,9 @@ public class InstalacionNuevaApiController {
         return new ResponseEntity<>(instalacionNuevaService.findInstalacion(id), HttpStatus.OK);
     }
 
-    @GetMapping("/instalaciones-nuevas/estado/get/{estado}")
-    public ResponseEntity<?> findInstalacionesNuevasEstado(@PathVariable("estado") String estado) {
-        return new ResponseEntity<>(instalacionNuevaService.findAllByEstado(estado), HttpStatus.OK);
+    @GetMapping("/instalaciones-nuevas/estado/get/{estado}/{idtecnico}")
+    public ResponseEntity<?> findInstalacionesNuevasEstado(@PathVariable("estado") String estado, @PathVariable("idtecnico") int idtecnico) {
+        return new ResponseEntity<>(instalacionNuevaService.findAllByEstado(estado, idtecnico), HttpStatus.OK);
     }
 
     @PostMapping("/instalaciones-nuevas/post")

@@ -46,10 +46,10 @@ public class InstalacionNuevaServiceImpl implements IInstalacionNuevaService {
     }
 
     @Override
-    public List<Map<String, Object>> findAllByEstado(String estado) {
+    public List<Map<String, Object>> findAllByEstado(String estado, int idtecnico) {
         try {
-            if (!instalacionNuevaRepository.findAllByEstado(estado).isEmpty()) {
-                return instalacionNuevaRepository.findAllByEstado(estado);
+            if (!instalacionNuevaRepository.findAllByEstado(estado, idtecnico).isEmpty()) {
+                return instalacionNuevaRepository.findAllByEstado(estado, idtecnico);
             } else {
                 throw new NoSuchElementException("No existen elementos en la base de datos.");
             }

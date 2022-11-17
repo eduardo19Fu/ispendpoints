@@ -12,10 +12,11 @@ public interface IInstalacionNuevaRepository extends JpaRepository<InstalacionNu
 
     @Query(value =  "select insn.*, lg.nombre as tecnico\n" +
                     "from instalaciones_nuevas as insn\n" +
-                    "left join login as lg on lg.id = insn.idtecnico",
+                    "left join login as lg on lg.id = insn.idtecnico\n" +
+                    "where insn.estado = 'pendiente'",
             nativeQuery = true)
     List<Map<String, Object>> findAllInstalacionesNuevas();
 
-    @Query(value = "Select * from instalaciones_nuevas where estado = :estado", nativeQuery = true)
-    List<Map<String, Object>> findAllByEstado(@Param("estado") String estado);
+    @Query(value = "Select * from instalaciones_nuevas where estado = :estado and idtecnico = :idtecnico", nativeQuery = true)
+    List<Map<String, Object>> findAllByEstado(@Param("estado") String estado, @Param("idtecnico") int idtecnico);
 }

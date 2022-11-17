@@ -11,7 +11,7 @@ public interface IInstalacionNuevaService {
 
     public List<Map<String, Object>> findAll2();
 
-    public List<Map<String, Object>> findAllByEstado(String estado);
+    public List<Map<String, Object>> findAllByEstado(String estado, int idtecnico);
 
     public InstalacionNueva findInstalacion(Integer id);
 
