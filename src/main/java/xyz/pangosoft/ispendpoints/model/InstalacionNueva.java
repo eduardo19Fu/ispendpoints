@@ -39,16 +39,18 @@ public class InstalacionNueva implements Serializable {
     private String direccionServicio;
     private String notas;
     private String fotoIdentificacion;
+    private int idtecnico;
+    private int idvendedor;
+    private String estado;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
-    private int idtecnico;
 
     @Temporal(TemporalType.DATE)
     private Date fechaInstalacion;
 
     @Temporal(TemporalType.DATE)
     private Date fechaVisita;
-    private String estado;
 
     @PrePersist
     public void prepersist() {
