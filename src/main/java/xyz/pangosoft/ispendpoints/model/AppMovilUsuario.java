@@ -29,7 +29,7 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-@Table(name = "ap_movil_usuarios")
+@Table(name = "app_movil_usuarios")
 public class AppMovilUsuario implements Serializable {
 
     @Id
