@@ -29,7 +29,6 @@ public class AppMovilUsuarioServiceImpl implements UserDetailsService, IAppMovil
 
     private Logger logger = LoggerFactory.getLogger(AppMovilUsuarioServiceImpl.class);
 
-    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
