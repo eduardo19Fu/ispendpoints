@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,7 +41,7 @@ public class InstalacionNueva implements Serializable {
     private String notas;
     private String fotoIdentificacion;
     private int idtecnico;
-    private int idvendedor;
+    private Integer idvendedor;
     private String estado;
 
     @Temporal(TemporalType.TIMESTAMP)
