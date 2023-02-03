@@ -1,5 +1,7 @@
 package xyz.pangosoft.ispendpoints.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.pangosoft.ispendpoints.exception.exceptions.DataAccessException;
@@ -15,6 +17,8 @@ import java.util.Map;
 
 @Service
 public class InstalacionNuevaServiceImpl implements IInstalacionNuevaService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(InstalacionNuevaServiceImpl.class);
 
     @Autowired
     private IInstalacionNuevaRepository instalacionNuevaRepository;
@@ -36,12 +40,14 @@ public class InstalacionNuevaServiceImpl implements IInstalacionNuevaService {
     public List<Map<String, Object>> findAll2() {
         try {
             if (!instalacionNuevaRepository.findAllInstalacionesNuevas().isEmpty()) {
+                LOGGER.info("****** Consultando Instalaciones *******");
                 return instalacionNuevaRepository.findAllInstalacionesNuevas();
             } else {
                 throw new NoSuchElementException("No existen elementos en la base de datos.");
             }
         } catch(DataAccessException e) {
-            throw new DataAccessException(e.getMessage());
+            LOGGER.error(e.getMessage());
+            throw new DataAccessException("Ha ocurrido una excepción de tipo SQLException");
         }
     }
 
@@ -55,6 +61,22 @@ public class InstalacionNuevaServiceImpl implements IInstalacionNuevaService {
             }
         } catch(DataAccessException e) {
             throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findAllInstaladasYNoInstaladas(int idtecnico) {
+        try {
+            if (!instalacionNuevaRepository.findInstaladasNoInstaladas(idtecnico).isEmpty()) {
+                LOGGER.info("****** Consultado Ordenes con estado Instalado y No Instalado *****");
+                return instalacionNuevaRepository.findInstaladasNoInstaladas(idtecnico);
+            } else {
+                LOGGER.error("Elementos no encontrados");
+                throw new NoSuchElementException("No existen elementos en la base de datos.");
+            }
+        } catch(org.springframework.dao.DataAccessException e) {
+            LOGGER.error(e.getMessage());
+            throw new DataAccessException("Ha ocurrido un error al consultar la Base de Datos!");
         }
     }
 

@@ -43,6 +43,8 @@ public class InstalacionNueva implements Serializable {
     private int idtecnico;
     private Integer idvendedor;
     private String estado;
+    private String prioridad;
+    private boolean siPago;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;

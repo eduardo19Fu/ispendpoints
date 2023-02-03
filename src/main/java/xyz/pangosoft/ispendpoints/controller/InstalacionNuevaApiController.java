@@ -1,5 +1,7 @@
 package xyz.pangosoft.ispendpoints.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class InstalacionNuevaApiController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstalacionNuevaApiController.class);
     @Autowired
     private IInstalacionNuevaService instalacionNuevaService;
 
@@ -38,6 +41,12 @@ public class InstalacionNuevaApiController {
         return new ResponseEntity<>(instalacionNuevaService.findInstalacion(id), HttpStatus.OK);
     }
 
+    @GetMapping("/instalaciones-nuevas/instalacion-status/get/{idtecnico}")
+    public ResponseEntity<?> findInstalacionesNuevasInstaldasNoInstaladas(@PathVariable("idtecnico") Integer idtecnico) {
+        LOGGER.info("Ejecutando petición al servicio");
+        return new ResponseEntity<>(instalacionNuevaService.findAllInstaladasYNoInstaladas(idtecnico), HttpStatus.OK);
+    }
+
     @GetMapping("/instalaciones-nuevas/estado/get/{estado}/{idtecnico}")
     public ResponseEntity<?> findInstalacionesNuevasEstado(@PathVariable("estado") String estado, @PathVariable("idtecnico") int idtecnico) {
         return new ResponseEntity<>(instalacionNuevaService.findAllByEstado(estado, idtecnico), HttpStatus.OK);
@@ -45,6 +54,7 @@ public class InstalacionNuevaApiController {
 
     @PostMapping("/instalaciones-nuevas/post")
     public ResponseEntity<?> create(@RequestBody Map<String, Object> body) {
+        LOGGER.info("Registro de Orden de Instalación");
         InstalacionNueva instalacionNueva = new InstalacionNueva();
 
 
@@ -57,9 +67,18 @@ public class InstalacionNuevaApiController {
         instalacionNueva.setMovil(body.get("movil").toString());
         instalacionNueva.setDireccionServicio(body.get("direccion_servicio").toString());
         instalacionNueva.setEstado("pendiente");
-        if (body.get("notas") != null)
-            instalacionNueva.setNotas(body.get("notas").toString());
         instalacionNueva.setFotoIdentificacion(body.get("foto_identificacion").toString());
+        instalacionNueva.setPrioridad(body.get("prioridad").toString());
+
+        if (body.get("notas") != null) { instalacionNueva.setNotas(body.get("notas").toString()); }
+        
+        if(body.get("siPago").toString().equals("SI")) {
+            instalacionNueva.setSiPago(true);
+        } else if(body.get("siPago").toString().equals("NO")) {
+            instalacionNueva.setSiPago(false);
+        }
+
+        LOGGER.debug("Orden de Instalación => " + instalacionNueva);
 
         return new ResponseEntity<>(instalacionNuevaService.save(instalacionNueva), HttpStatus.CREATED);
     }
@@ -72,6 +91,8 @@ public class InstalacionNuevaApiController {
         instalacionNueva = instalacionNuevaService.findInstalacion((int) body.get("id"));
         instalacionNueva.setEstado(body.get("estado").toString());
         instalacionNueva.setIdtecnico((int) body.get("tecnico"));
+
+        LOGGER.info("Instalación Nueva => " + instalacionNueva);
 
         try {
             if (!body.get("fecha_instalacion").toString().isEmpty() && !body.get("fecha_visita").toString().isEmpty()) {
@@ -88,6 +109,7 @@ public class InstalacionNuevaApiController {
                 instalacionNueva.setFechaVisita(null);
             }
         } catch (java.text.ParseException e) {
+            LOGGER.error(e.getMessage());
             throw new ParseException(e.getMessage());
         }
 

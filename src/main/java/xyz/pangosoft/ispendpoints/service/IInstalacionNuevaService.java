@@ -13,6 +13,8 @@ public interface IInstalacionNuevaService {
 
     public List<Map<String, Object>> findAllByEstado(String estado, int idtecnico);
 
+    public List<Map<String, Object>> findAllInstaladasYNoInstaladas(int idtecnico);
+
     public InstalacionNueva findInstalacion(Integer id);
 
     public InstalacionNueva save(InstalacionNueva instalacionNueva);
